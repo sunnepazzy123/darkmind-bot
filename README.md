@@ -1,38 +1,36 @@
-# TailAdmin Next.js - Free Next.js Tailwind Admin Dashboard Template
+# 🧠 DarkMind Bot Dashboard
 
-TailAdmin is a free and open-source admin dashboard template built on **Next.js and Tailwind CSS** providing developers with everything they need to create a feature-rich and data-driven: back-end, dashboard, or admin panel solution for any sort of web project.
+**DarkMind Bot** is a modern, AI-powered trading management dashboard built with **Next.js** and **Tailwind CSS**, providing real-time market monitoring, automated trading insights, and bot configuration controls — all in a sleek and data-driven interface.
 
-![TailAdmin - Next.js Dashboard Preview](./banner.png)
+![DarkMind Bot Dashboard Preview](./banner.png)
 
-With TailAdmin Next.js, you get access to all the necessary dashboard UI components, elements, and pages required to build a high-quality and complete dashboard or admin panel. Whether you're building a dashboard or admin panel for a complex web application or a simple website. 
+With the **DarkMind Bot Dashboard**, you can easily visualize trading activity, monitor price streams, configure strategy parameters, and manage account balances — all from a unified interface. Whether you're automating crypto trades or analyzing live market data, DarkMind Bot delivers the tools and analytics needed for informed, efficient trading.
 
-TailAdmin utilizes the powerful features of **Next.js 15** and common features of Next.js such as server-side rendering (SSR), static site generation (SSG), and seamless API route integration. Combined with the advancements of **React 19** and the robustness of **TypeScript**, TailAdmin is the perfect solution to help get your project up and running quickly.
+Built with the latest technologies — **Next.js 15**, **React 19**, and **TypeScript** — the dashboard combines responsive UI design with real-time streaming from **FastAPI-powered** backend services, ensuring smooth performance and secure connectivity.
 
-## Overview
+---
 
-TailAdmin provides essential UI components and layouts for building feature-rich, data-driven admin dashboards and control panels. It's built on:
+## ✨ Key Features
 
-- Next.js 15.x
-- React 19
-- TypeScript
-- Tailwind CSS V4
+- 📈 **Live Price Streaming** — Real-time data updates via SSE directly from the trading backend.  
+- 🤖 **Bot Control Panel** — Start, stop, and monitor your trading bots effortlessly.  
+- 💹 **Performance Metrics** — Visual dashboards to track profit/loss, trade history, and balance changes.  
+- ⚙️ **Dynamic Configuration** — Update trading parameters and refresh symbol settings on the fly.  
+- 🧩 **Modular Components** — Built with Tailwind and reusable React components for easy customization.  
+- 🔒 **Secure Authentication** — Token-based login flow integrated with the backend API.  
 
-### Quick Links
-- [✨ Visit Website](https://tailadmin.com)
-- [📄 Documentation](https://tailadmin.com/docs)
-- [⬇️ Download](https://tailadmin.com/download)
-- [🖌️ Figma Design File (Community Edition)](https://www.figma.com/community/file/1463141366275764364)
-- [⚡ Get PRO Version](https://tailadmin.com/pricing)
+---
 
-### Demos
-- [Free Version](https://nextjs-free-demo.tailadmin.com)
-- [Pro Version](https://nextjs-demo.tailadmin.com)
+## 🧰 Tech Stack
 
-### Other Versions
-- [HTML Version](https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template)
-- [React Version](https://github.com/TailAdmin/free-react-tailwind-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
+- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS  
+- **Backend:** FastAPI (Python), Uvicorn  
+- **Realtime:** Server-Sent Events (SSE) for streaming live data  
+- **State Management:** Zustand / React Context  
+- **Authentication:** JWT / Token-based  
 
+---
+## 🚀 Getting Started
 ## Installation
 
 ### Prerequisites
@@ -44,7 +42,8 @@ To get started with TailAdmin, ensure you have the following prerequisites insta
 Clone the repository using the following command:
 
 ```bash
-git clone https://github.com/TailAdmin/free-nextjs-admin-dashboard.git
+git clone https://github.com/yourusername/darkmind-bot.git
+cd darkmind-bot
 ```
 
 > Windows Users: place the repository near the root of your drive if you face issues while cloning.
