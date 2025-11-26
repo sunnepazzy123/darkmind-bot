@@ -9,7 +9,7 @@ export default function AuthGuard({ children }: Props) {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("auth_token") || sessionStorage.getItem("auth_token");
+    const token = localStorage.getItem("access_token") || sessionStorage.getItem("access_token");
     if (!token) {
       router.replace("/signin");
       return;

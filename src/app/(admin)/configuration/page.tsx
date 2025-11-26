@@ -32,7 +32,7 @@ export default async function Configuration() {
 
   try {
     const profilePromise =  apiGet("/users/profile", { token });
-    const configsPromise =  apiGet("/config", { token });
+    const configsPromise =  apiGet("/trading_pairs", { token });
     [profile, configs] = await Promise.all([profilePromise, configsPromise])
   } catch (err: any) {
     console.error("Failed to load profile:", err);

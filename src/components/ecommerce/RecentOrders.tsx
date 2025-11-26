@@ -1,3 +1,4 @@
+import { formatMoney } from "@/utils";
 import {
   Table,
   TableBody,
@@ -17,7 +18,7 @@ export default function RecentOrders({ recent_prices }: RecentOrdersType) {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Bot Recent Prices
+            Binance Recent Prices
           </h3>
         </div>
 
@@ -80,7 +81,7 @@ export default function RecentOrders({ recent_prices }: RecentOrdersType) {
                 isHeader
                 className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Symbol
+                Asset
               </TableCell>
               <TableCell
                 isHeader
@@ -96,7 +97,7 @@ export default function RecentOrders({ recent_prices }: RecentOrdersType) {
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
             {recent_prices.map((recent, i) => (
               <TableRow
-                key={recent.symbol + i}
+                key={recent.asset}
                 className={`${i % 2 === 0
                   ? "bg-gray-50 dark:bg-gray-900"
                   : "bg-white dark:bg-gray-950"
@@ -106,7 +107,7 @@ export default function RecentOrders({ recent_prices }: RecentOrdersType) {
                   {recent.timestamp}
                 </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {recent.symbol}
+                  {recent.asset}
                 </TableCell>
                 <TableCell
                   className={`py-3 text-theme-sm font-medium ${recent.price > 0
@@ -114,7 +115,7 @@ export default function RecentOrders({ recent_prices }: RecentOrdersType) {
                       : "text-red-600 dark:text-red-400"
                     }`}
                 >
-                  {recent.price}
+                  {formatMoney(recent.price)}
                 </TableCell>
               </TableRow>
             ))}

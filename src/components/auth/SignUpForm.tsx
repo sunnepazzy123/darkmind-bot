@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiPost } from "@/requests";
 import Button from "../ui/button/Button";
+import { ACCESS_TOKEN } from "@/constants";
 
 
 
@@ -38,10 +39,10 @@ export default function SignUpForm() {
         password,
       });
 
-      const token = res?.token ?? res?.access_token ?? res?.data?.token;
+      const token = res?.access_token;
       if (token) {
-        if (isChecked) localStorage.setItem("auth_token", token);
-        else sessionStorage.setItem("auth_token", token);
+        if (isChecked) localStorage.setItem(ACCESS_TOKEN, token);
+        else sessionStorage.setItem(ACCESS_TOKEN, token);
       }
 
       // redirect after successful signup

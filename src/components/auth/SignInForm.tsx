@@ -8,6 +8,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user.store";
+import { ACCESS_TOKEN } from "@/constants";
 
 
 export default function SignInForm() {
@@ -37,8 +38,8 @@ export default function SignInForm() {
       const token = res?.access_token;
       if (token) {
         const profile = await apiGet("/users/profile", {token})
-        localStorage.setItem("auth_token", token)
-        sessionStorage.setItem("auth_token", token)
+        localStorage.setItem(ACCESS_TOKEN, token)
+        sessionStorage.setItem(ACCESS_TOKEN, token)
         setUser(profile)
       }
 

@@ -3,6 +3,7 @@ import React from "react";
 import Badge from "../ui/badge/Badge";
 import { ArrowDownIcon, BoxIconLine, } from "@/icons";
 import { Bitcoin, TrendingUp } from "lucide-react";
+import { formatMoney } from "@/utils";
 
 
 interface IEcommerceMetrics {
@@ -45,10 +46,10 @@ export const EcommerceMetrics = ({ account, symbol }: IEcommerceMetrics) => {
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Orders
+              USDT
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              5,359
+            {formatMoney(account["USDT"])}
             </h4>
           </div>
 

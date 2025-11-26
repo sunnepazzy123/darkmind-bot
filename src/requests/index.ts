@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, } from "axios";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 const api: AxiosInstance = axios.create({
     baseURL: API_BASE,
@@ -21,15 +21,25 @@ api.interceptors.response.use(
     }
 );
 
+function extractToken(params?: Record<string, any>) {
+  if (!params) return { token: null, rest: {} };
+
+  const { token, ...rest } = params;
+  return { token, rest };
+}
+
 // GET helper
 export async function apiGet<T = any>(
   path: string,
-  params?: Record<string, any>
+  params: Record<string, any> = {}
 ) {
+  const { token, rest } = extractToken(params);
+
   const res = await api.get<T>(path, {
-    params,
-    headers: params?.token ? { Authorization: `Bearer ${params.token}` } : undefined,
+    params: rest,
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
+
   return res.data;
 }
 
@@ -37,11 +47,12 @@ export async function apiGet<T = any>(
 export async function apiPost<T = any>(
   path: string,
   body?: unknown,
-  params?: Record<string, any>
+  params: Record<string, any> = {}
 ) {
+  const { token, rest } = extractToken(params);
   const res = await api.post<T>(path, body, {
-    params,
-    headers: params?.token ? { Authorization: `Bearer ${params.token}` } : undefined,
+    params: rest,
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   });
   return res.data;
 }

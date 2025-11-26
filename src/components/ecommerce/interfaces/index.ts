@@ -4,6 +4,7 @@ export type SymbolType = "BTCUSDT"
 export interface Prices {
     timestamp: string,
     symbol: SymbolType,
-    price: number
+    price: number,
+    asset: string
   
 }

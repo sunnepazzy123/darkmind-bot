@@ -11,31 +11,40 @@ import PriceLog from "@/components/terminal";
 import ComponentCard from "@/components/common/ComponentCard";
 import PaginatedTable from "@/components/tables/customPaginationTable";
 import { useConfigStore } from "@/store/config.store";
+import { getUSDTPrices } from "@/utils";
 
 export default function Ecommerce() {
   const [recentPrices, setRecentPrices] = useState<any[]>([]);
   const [account, setAccount] = useState<any[]>([]);
-  const [symbol, setSymbol] = useState("BTC")
-const [loading, setLoading] = useState(true);
-const setConfig = useConfigStore((state) => state.setConfig)
+  const [orders, setOrders] = useState<any[]>([]);
 
-  const tradeTableHeaders = ["timestamp", "symbol", "side", "price", "quantity", "result"]
+  const [symbol, setSymbol] = useState("BTC")
+  const [loading, setLoading] = useState(true);
+  const { setBotStatus } = useConfigStore((state) => state)
+
+  const tradeTableHeaders = ["timestamp", "symbol", "side", "price", "avg_price", "quantity", "threshold", "percent_change", "result"]
 
   useEffect(() => {
     const fetchRecentPrices = async () => {
       try {
-        const dataPromise = apiGet("/bot/get_recent_prices?symbol=BTCUSDT&n=100");
-        const accountPromise = apiGet(`/binance/get_account/${symbol}`);
-        const [data, dataAccount] = await Promise.all([dataPromise, accountPromise])
+        const orderPromise = apiGet("/orders");
+        const botStatusPromise = apiGet(`/bots/status/BTCUSDT`);
+        const accountBalancesPromise = apiGet(`/accounts/BTC`);
 
-        setRecentPrices(data);
-        setAccount(dataAccount)
-        setConfig({environment: dataAccount.environment})
+
+        const [dataOrders, dataBolt, dataAccountBalance ] = await Promise.all([orderPromise, botStatusPromise, accountBalancesPromise])
+         const dataRecentPrices = await getUSDTPrices()
+        
+        setOrders(dataOrders)
+        setBotStatus(dataBolt)
+        setRecentPrices(dataRecentPrices)
+        setAccount(dataAccountBalance)
+        console.log(dataAccountBalance)
       } catch (err) {
         console.error("Failed to fetching:", err);
-    } finally {
-      setLoading(false);
-    }
+      } finally {
+        setLoading(false);
+      }
 
     };
 
@@ -46,13 +55,13 @@ const setConfig = useConfigStore((state) => state.setConfig)
 
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-span-7">
-      {loading ? (
-        <div className="flex items-center justify-center h-40 text-gray-400 dark:text-gray-500">
-          Loading metrics...
-        </div>
-      ) : (
-        <EcommerceMetrics account={account} symbol={symbol} />
-      )}
+        {loading ? (
+          <div className="flex items-center justify-center h-40 text-gray-400 dark:text-gray-500">
+            Loading metrics...
+          </div>
+        ) : (
+          <EcommerceMetrics account={account} symbol={symbol} />
+        )}
         {/* <MonthlySalesChart /> */}
         <MonthlyTarget />
 
@@ -71,7 +80,7 @@ const setConfig = useConfigStore((state) => state.setConfig)
         {/* <DemographicCard /> */}
 
         <ComponentCard title="Bot Trade">
-          <PaginatedTable tableHeaders={tradeTableHeaders} tableData={[]} rowsPerPage={5} emptyDataMsg="No Trade" />
+          <PaginatedTable tableHeaders={tradeTableHeaders} tableData={orders} rowsPerPage={5} emptyDataMsg="No Trade" />
         </ComponentCard>
 
       </div>

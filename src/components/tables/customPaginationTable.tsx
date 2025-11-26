@@ -10,13 +10,17 @@ interface TableProps {
   tableData: Record<string, any>[];
   rowsPerPage?: number;
   emptyDataMsg?: string;
+  onActionClick?: (row: Record<string, any>) => void;
+  actionButtonNames?: string[]
 }
 
 export default function PaginatedTable({
   tableHeaders,
   tableData,
   rowsPerPage = 10,
-  emptyDataMsg
+  emptyDataMsg,
+  onActionClick,
+  actionButtonNames
 }: TableProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -31,7 +35,7 @@ export default function PaginatedTable({
 
   return (
     <div className="space-y-6">
-      <CustomTable tableHeaders={tableHeaders} tableData={paginatedData} emptyDataMsg={emptyDataMsg} />
+      <CustomTable tableHeaders={tableHeaders} tableData={paginatedData} emptyDataMsg={emptyDataMsg} onActionClick={onActionClick} actionButtonNames={actionButtonNames} />
       {totalPages > 1 && (
         <div className="flex justify-center">
           <Pagination

@@ -17,7 +17,6 @@ export default async function Profile() {
   let error: string | null = null;
   const token = await getAuthToken();
 
-
   try {
     profile = await apiGet("/users/profile", { token });
   } catch (err: any) {

@@ -13,7 +13,7 @@ const AppHeader: React.FC = () => {
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
-  const config = useConfigStore((state) => state.config)
+  const { botStatus, config } = useConfigStore((state) => state)
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -165,6 +165,7 @@ const AppHeader: React.FC = () => {
         >
           <div className="flex text-gray-900 dark:text-white">
             {config ? config.environment : ""}
+            Bot Status: {botStatus ? botStatus.status : "Off"}
           </div>
           <div className="flex items-center gap-2 2xsm:gap-3">
             {/* <!-- Dark Mode Toggler --> */}
