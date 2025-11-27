@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Build Docker image with the specified tag
 docker build -t vibratewarsaw/darkmind-bot-fe .
 

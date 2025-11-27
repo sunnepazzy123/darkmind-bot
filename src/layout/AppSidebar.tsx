@@ -61,6 +61,12 @@ const navItems: NavItem[] = [
     path: "/configuration",
   },
 
+      {
+    icon: <UserCircleIcon />,
+    name: "Api Key",
+    path: "/api-keys",
+  },
+
   // {
   //   name: "Forms",
   //   icon: <ListIcon />,

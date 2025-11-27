@@ -18,7 +18,7 @@ export default async function Profile() {
   const token = await getAuthToken();
 
   try {
-    profile = await apiGet("/users/profile", { token });
+    profile = await apiGet("/users/profile/", { token });
   } catch (err: any) {
     console.error("Failed to load profile:", err);
     error = err?.message || "Failed to load profile";

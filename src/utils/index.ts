@@ -33,33 +33,47 @@ export const formatCellValue = (data: string, header: string) => {
 }
 
 export async function getUSDTPrices() {
-  const majorCoins = [
-    "BTC","ETH","BNB","SOL","XRP","ADA","DOGE","AVAX","DOT","LINK",
-    "MATIC","TRX","ATOM","LTC","UNI","ETC","XLM","XMR","OP","APT",
-    "ARB","FIL","AAVE","SAND","NEAR","INJ","ALGO","RUNE","GRT","VET"
-  ];
+  const majorCoins: Record<string, string> = {
+    BTC: "Bitcoin",
+    ETH: "Ethereum",
+    BNB: "Binance Coin",
+    LTC: "Litecoin",
+    XRP: "XRP",
+    DOGE: "Dogecoin",
+    DOT: "Polkadot",
+  };
+
+  // Brand image auto-mapping (1 → n)
+  const brandMap: Record<string, string> = {};
+  Object.keys(majorCoins).forEach((coin, i) => {
+    brandMap[coin] = `./images/brand/cryptos/${coin}.svg`;
+  });
 
   try {
-    // formatted date only
-    const formattedTime = moment().format("YYYY-MM-DD HH:mm:ss");
+    const resp = await axios.get("https://api.binance.com/api/v3/ticker/24hr");
 
-    // Only price data needed
-    const pricesResp = await axios.get("https://api.binance.com/api/v3/ticker/price");
+    const map = new Map<string, any>();
+    for (const item of resp.data) map.set(item.symbol, item);
 
-    // Fast lookup map
-    const priceMap = new Map<string, string>();
-    for (const p of pricesResp.data) {
-      priceMap.set(p.symbol, p.price);
-    }
-
-    // Build final result
-    return majorCoins.map(asset => {
+    return Object.keys(majorCoins).map(asset => {
       const symbol = `${asset}USDT`;
+      const info = map.get(symbol);
+
+      // Format price into "$12,345.67"
+      const formattedPrice = info?.lastPrice
+        ? `$${Number(info.lastPrice).toLocaleString()}`
+        : null;
+
+      const changePercent = info?.priceChangePercent ?? null;
 
       return {
-        asset,
-        price: priceMap.get(symbol) ?? null,
-        timestamp: formattedTime
+        symbol,
+        companyName: majorCoins[asset],
+        price: formattedPrice,
+        change: changePercent ? `${changePercent}%` : null,
+        changeDirection:
+          changePercent >= 0 ? "up" : "down",
+        brandImage: brandMap[asset],
       };
     });
 

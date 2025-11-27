@@ -7,11 +7,12 @@ import StatisticsChart from "@/components/ecommerce/StatisticsChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
 import { apiGet } from "@/requests";
-import PriceLog from "@/components/terminal";
 import ComponentCard from "@/components/common/ComponentCard";
 import PaginatedTable from "@/components/tables/customPaginationTable";
 import { useConfigStore } from "@/store/config.store";
 import { getUSDTPrices } from "@/utils";
+import DividendChart from "@/components/stocks/DividendChart";
+import WatchList from "@/components/stocks/WatchList";
 
 export default function Ecommerce() {
   const [recentPrices, setRecentPrices] = useState<any[]>([]);
@@ -27,9 +28,9 @@ export default function Ecommerce() {
   useEffect(() => {
     const fetchRecentPrices = async () => {
       try {
-        const orderPromise = apiGet("/orders");
-        const botStatusPromise = apiGet(`/bots/status/BTCUSDT`);
-        const accountBalancesPromise = apiGet(`/accounts/BTC`);
+        const orderPromise = apiGet("/orders/");
+        const botStatusPromise = apiGet(`/bots/status/BTCUSDT/`);
+        const accountBalancesPromise = apiGet(`/accounts/BTC/`);
 
 
         const [dataOrders, dataBolt, dataAccountBalance ] = await Promise.all([orderPromise, botStatusPromise, accountBalancesPromise])
@@ -62,14 +63,12 @@ export default function Ecommerce() {
         ) : (
           <EcommerceMetrics account={account} symbol={symbol} />
         )}
-        {/* <MonthlySalesChart /> */}
         <MonthlyTarget />
 
       </div>
 
       <div className="col-span-12 xl:col-span-5">
-        <h2 className="text-xl font-bold mb-4 dark:text-white">Live Logs</h2>
-        <PriceLog />
+        <WatchList recentPrices={recentPrices} />
       </div>
 
       <div className="col-span-12">
@@ -86,7 +85,8 @@ export default function Ecommerce() {
       </div>
 
       <div className="col-span-12 xl:col-span-7">
-        <RecentOrders recent_prices={recentPrices} />
+        <MonthlySalesChart />
+
       </div>
     </div>
   );
