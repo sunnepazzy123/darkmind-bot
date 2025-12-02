@@ -2,10 +2,11 @@ import { create } from "zustand"; // ✅ must be exact
 
 
 interface User {
-    email: string,
-    last_name: string,
-    first_name: string,
-    id: string
+  picture: string;
+  email: string,
+  last_name: string,
+  first_name: string,
+  id: string
 }
 
 interface UserState {

@@ -4,6 +4,7 @@ import { StrategyConfig } from "./page";
 import PaginatedTable from "@/components/tables/customPaginationTable";
 import { apiGet, apiPost } from "@/requests";
 import { useConfigStore } from "@/store/config.store";
+import { config } from "process";
 
 interface ICategoryCard {
     configs: StrategyConfig[]
@@ -18,7 +19,7 @@ export default function ConfigurationCard({ configs }: ICategoryCard) {
             await apiPost('/bots/start', data);
             const botStatus = await apiGet(`/bots/status/${data.symbol}`);
             setBotStatus(botStatus)
-            alert("Bot started successfully!");
+            alert(`Bot started successfully for ${data.symbol}!`);
         } catch (error) {
             console.error("Error starting bot:", error);
             alert("Failed to start bot");

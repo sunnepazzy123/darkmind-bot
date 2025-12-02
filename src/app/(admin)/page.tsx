@@ -33,14 +33,14 @@ export default function Ecommerce() {
         const accountBalancesPromise = apiGet(`/accounts/BTC/`);
 
 
-        const [dataOrders, dataBolt, dataAccountBalance ] = await Promise.all([orderPromise, botStatusPromise, accountBalancesPromise])
-         const dataRecentPrices = await getUSDTPrices()
-        
+
+        const [dataRecentPrices, dataOrders, dataBolt, dataAccountBalance] = await Promise.all([getUSDTPrices(), orderPromise, botStatusPromise, accountBalancesPromise, ])
+
+
         setOrders(dataOrders)
         setBotStatus(dataBolt)
         setRecentPrices(dataRecentPrices)
         setAccount(dataAccountBalance)
-        console.log(dataAccountBalance)
       } catch (err) {
         console.error("Failed to fetching:", err);
       } finally {

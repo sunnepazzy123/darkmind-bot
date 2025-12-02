@@ -10,13 +10,13 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/user.store";
 import { ACCESS_TOKEN } from "@/constants";
 
-
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
 
-    // form state
+  // form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,7 +25,7 @@ export default function SignInForm() {
 
   const router = useRouter();
 
-    async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -37,7 +37,7 @@ export default function SignInForm() {
 
       const token = res?.access_token;
       if (token) {
-        const profile = await apiGet("/users/profile", {token})
+        const profile = await apiGet("/users/profile", { token })
         localStorage.setItem(ACCESS_TOKEN, token)
         sessionStorage.setItem(ACCESS_TOKEN, token)
         setUser(profile)
@@ -51,6 +51,11 @@ export default function SignInForm() {
       setLoading(false);
     }
   }
+
+async function handleOauthLogin() {
+  // Redirect to your backend Google OAuth endpoint
+    window.location.href = `${backendUrl}/auth/google?redirect_uri=${window.location.origin}/auth/callback`;
+}
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
@@ -75,7 +80,7 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10" onClick={handleOauthLogin}>
                 <svg
                   width="20"
                   height="20"
@@ -191,7 +196,7 @@ export default function SignInForm() {
                     disabled={loading}
                     className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 disabled:opacity-60"
                   >
-                    {loading ? "Signing up..." : "Sign Up"}
+                    {loading ? "Signing in..." : "Sign In"}
                   </button>
                 </div>
               </div>

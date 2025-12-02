@@ -2,33 +2,41 @@ import axios from "axios";
 import moment from "moment";
 
 export const formatMoney = (amount: number, currency = "USD") => {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    }).format(amount);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
 };
 
 export const formatCellValue = (data: string, header: string) => {
-    if (!data) return "-"
+  if (!data) return "-"
 
-    if (header.startsWith("percent")) {
-        return Number(Number(data).toFixed(1)) + "%"
+  if (header.startsWith("percent")) {
+    return Number(Number(data).toFixed(1)) + "%"
+  }
+
+  if (header.endsWith("price")) {
+    return formatMoney(+data)
+  }
+
+  if (header.startsWith("timestamp")) {
+    if (moment(data, moment.ISO_8601, true).isValid()) {
+      return moment(data).format("YYYY-MM-DD HH:mm:ss"); // or any format you prefer
     }
+    return data
+  }
 
-    if (header.endsWith("price")) {
-        return formatMoney(+data)
+  if (header.startsWith("created_at")) {
+    if (moment(data, moment.ISO_8601, true).isValid()) {
+      // Display relative time
+      return moment(data).fromNow(); // e.g., "a day ago", "2 hours ago"
     }
-
-    if (header.startsWith("timestamp")) {
-        if (moment(data, moment.ISO_8601, true).isValid()) {
-            return moment(data).format("YYYY-MM-DD HH:mm:ss"); // or any format you prefer
-        }
-        return data
-    }
-
     return data;
+  }
+
+  return data;
 
 }
 

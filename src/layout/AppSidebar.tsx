@@ -64,7 +64,7 @@ const navItems: NavItem[] = [
       {
     icon: <UserCircleIcon />,
     name: "Api Key",
-    path: "/api-keys",
+    path: "/key-vault",
   },
 
   // {

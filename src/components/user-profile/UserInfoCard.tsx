@@ -12,6 +12,7 @@ interface IUser {
   first_name: string,
   last_name: string,
   created_at: string
+  picture: string
 }
 
 export interface IUserInfoCard {

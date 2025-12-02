@@ -1,49 +1,25 @@
 "use client";
+import { formatCellValue } from "@/utils";
 import Switch from "../form/switch/Switch";
 import AddApiKeyModal from "./AddApiKeyModal";
 import { useState } from "react";
 
-interface ApiKey {
+interface IApiKey {
   id: string;
-  name: string;
-  value: string;
-  status: "Active" | "Disabled";
-  created: string;
-  lastUsed: string;
-  hasToggle: boolean;
+  user: string;
+  api_key: string;
+  api_secret: string;
+  environment: string;
+  created_at: string;
+  status: "active" | "disabled";
+  enabled: boolean;
 }
 
-const apiKeysData: ApiKey[] = [
-  {
-    id: "1",
-    name: "Production API key",
-    value: "sk_live_**********4248",
-    status: "Disabled",
-    created: "25 Jan, 2025",
-    lastUsed: "Today, 10:45 AM",
-    hasToggle: true,
-  },
-  {
-    id: "2",
-    name: "Development API key",
-    value: "dev_live_**********4923",
-    status: "Active",
-    created: "29 Dec, 2024",
-    lastUsed: "Today, 12:40 AM",
-    hasToggle: false,
-  },
-  {
-    id: "3",
-    name: "Legacy API Key",
-    value: "leg_live_**********0932",
-    status: "Active",
-    created: "12 Mar, 2024",
-    lastUsed: "Today, 11:45 PM",
-    hasToggle: false,
-  },
-];
+interface IApiKeyTable {
+  apiKeys: IApiKey[]
+}
 
-export default function ApiKeyTable() {
+export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = async (value: string, id: string) => {
@@ -84,9 +60,6 @@ export default function ApiKeyTable() {
                 Created
               </th>
               <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                Last used
-              </th>
-              <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
                 Disable/Enable
               </th>
               <th className="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -95,20 +68,20 @@ export default function ApiKeyTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {apiKeysData.map((apiKey) => (
+            {apiKeys.map((apiKey) => (
               <tr key={apiKey.id}>
                 <td className="py-3 pr-5 whitespace-nowrap">
                   <div>
                     <label
                       htmlFor={`api-${apiKey.id}`}
-                      className="mb-2 inline-block text-sm text-gray-700 dark:text-gray-400"
+                      className="mb-2 inline-block text-sm text-gray-700 dark:text-gray-400 capitalize"
                     >
-                      {apiKey.name}
+                      {apiKey.environment} API key
                     </label>
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <input
-                          value={apiKey.value}
+                          value={apiKey.api_key}
                           type="api"
                           id={`api-${apiKey.id}`}
                           className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full min-w-[360px] rounded-lg border border-gray-300 bg-transparent py-3 pr-[90px] pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -117,7 +90,7 @@ export default function ApiKeyTable() {
                         <button
                           id={`copy-button-${apiKey.id}`}
                           className="absolute top-1/2 right-0 inline-flex h-11 -translate-y-1/2 cursor-pointer items-center gap-1 rounded-r-lg border border-gray-300 py-3 pr-3 pl-3.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                          onClick={() => handleCopy(apiKey.value, apiKey.id)}
+                          onClick={() => handleCopy(apiKey.api_key, apiKey.id)}
                           disabled={copiedId === apiKey.id}
                         >
                           {copiedId === apiKey.id ? (
@@ -161,7 +134,62 @@ export default function ApiKeyTable() {
                           )}
                         </button>
                       </div>
-
+                      <div className="relative">
+                        <input
+                          value={apiKey.api_secret}
+                          type="api"
+                          id={`api-${apiKey.id}`}
+                          className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full min-w-[360px] rounded-lg border border-gray-300 bg-transparent py-3 pr-[90px] pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                          readOnly
+                        />
+                        <button
+                          id={`copy-button-${apiKey.id}`}
+                          className="absolute top-1/2 right-0 inline-flex h-11 -translate-y-1/2 cursor-pointer items-center gap-1 rounded-r-lg border border-gray-300 py-3 pr-3 pl-3.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
+                          onClick={() => handleCopy(apiKey.api_secret, apiKey.id)}
+                          disabled={copiedId === apiKey.id}
+                        >
+                          {copiedId === apiKey.id ? (
+                            <>
+                              <svg
+                                className="fill-current "
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M7.999 14.2l-4.2-4.2 1.4-1.4 2.8 2.8 6-6 1.4 1.4-7.4 7.4z"
+                                  fill="currentColor"
+                                />
+                              </svg>
+                              <span className="ml-1">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                className="fill-current"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M6.58822 4.58398C6.58822 4.30784 6.81207 4.08398 7.08822 4.08398H15.4154C15.6915 4.08398 15.9154 4.30784 15.9154 4.58398L15.9154 12.9128C15.9154 13.189 15.6916 13.4128 15.4154 13.4128H7.08821C6.81207 13.4128 6.58822 13.189 6.58822 12.9128V4.58398ZM7.08822 2.58398C5.98365 2.58398 5.08822 3.47942 5.08822 4.58398V5.09416H4.58496C3.48039 5.09416 2.58496 5.98959 2.58496 7.09416V15.4161C2.58496 16.5207 3.48039 17.4161 4.58496 17.4161H12.9069C14.0115 17.4161 14.9069 16.5207 14.9069 15.4161L14.9069 14.9128H15.4154C16.52 14.9128 17.4154 14.0174 17.4154 12.9128L17.4154 4.58398C17.4154 3.47941 16.52 2.58398 15.4154 2.58398H7.08822ZM13.4069 14.9128H7.08821C5.98364 14.9128 5.08822 14.0174 5.08822 12.9128V6.59416H4.58496C4.30882 6.59416 4.08496 6.81801 4.08496 7.09416V15.4161C4.08496 15.6922 4.30882 15.9161 4.58496 15.9161H12.9069C13.183 15.9161 13.4069 15.6922 13.4069 15.4161L13.4069 14.9128Z"
+                                  fill=""
+                                />
+                              </svg>
+                              <div id="copy-text">Copy</div>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                        
                       <div className="group relative inline-block">
                         <button className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 text-gray-700 dark:border-gray-700 dark:text-gray-400 ">
                           <svg
@@ -192,25 +220,24 @@ export default function ApiKeyTable() {
                     </div>
                   </div>
                 </td>
+
+                
                 <td className="px-5 py-3 whitespace-nowrap">
                   <span
-                    className={`inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      apiKey.status === "Active"
+                    className={`inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${apiKey.status === "active"
                         ? "bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500"
                         : "bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500"
-                    }`}
+                      }`}
                   >
                     {apiKey.status}
                   </span>
                 </td>
+                
                 <td className="px-5 py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                  {apiKey.created}
-                </td>
-                <td className="px-5 py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                  {apiKey.lastUsed}
+                  {formatCellValue(apiKey.created_at, "created_at")}
                 </td>
                 <td className="px-5 py-3 whitespace-nowrap">
-                  <Switch defaultChecked={apiKey.status === "Active"} />
+                  <Switch defaultChecked={apiKey.enabled} label="" />
                 </td>
                 <td className="px-5 py-3 whitespace-nowrap">
                   <div className="flex w-full items-center gap-3">
