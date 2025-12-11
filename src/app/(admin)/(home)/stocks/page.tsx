@@ -26,7 +26,7 @@ export default function Stocks() {
       </div>
       <div className="col-span-12 space-y-6 xl:col-span-4">
         <DividendChart />
-        <WatchList />
+        <WatchList recentPrices={[]}/>
       </div>
       <div className="col-span-12">
         <LatestTransactions />

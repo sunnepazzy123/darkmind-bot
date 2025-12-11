@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiGet } from "@/requests";
 import { useUserStore } from "@/store/user.store";
+import { ACCESS_TOKEN } from "@/constants";
 
 type Props = { children: React.ReactNode };
 
@@ -14,7 +15,7 @@ export default function AuthGuard({ children }: Props) {
   useEffect(() => {
     const checkAuth = async () => {
       const token =
-        localStorage.getItem("access_token") || sessionStorage.getItem("access_token");
+        localStorage.getItem(ACCESS_TOKEN) || sessionStorage.getItem(ACCESS_TOKEN);
 
       if (!token) {
         router.replace("/signin");
@@ -22,8 +23,8 @@ export default function AuthGuard({ children }: Props) {
       }
 
       try {
-        const prrofile = await apiGet("/users/profile/", { token });
-        setUser(prrofile)
+        const profile = await apiGet("/users/profile/", { token });
+        setUser(profile)
       } catch (err) {
         router.replace("/signin");
         return;

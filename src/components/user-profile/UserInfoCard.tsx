@@ -5,15 +5,8 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
+import { IUser } from "@/interfaces/user.interface";
 
-interface IUser {
-  id: number,
-  email: string,
-  first_name: string,
-  last_name: string,
-  created_at: string
-  picture: string
-}
 
 export interface IUserInfoCard {
   user: IUser
@@ -40,7 +33,7 @@ export default function UserInfoCard({ user }: IUserInfoCard) {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.first_name}
+                {user.firstName}
               </p>
             </div>
 
@@ -49,7 +42,7 @@ export default function UserInfoCard({ user }: IUserInfoCard) {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {user.last_name}
+                {user.lastName}
               </p>
             </div>
 

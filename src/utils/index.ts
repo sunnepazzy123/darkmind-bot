@@ -13,7 +13,7 @@ export const formatMoney = (amount: number, currency = "USD") => {
 export const formatCellValue = (data: string, header: string) => {
   if (!data) return "-"
 
-  if (header.startsWith("percent")) {
+  if (header.startsWith("percentChange")) {
     return Number(Number(data).toFixed(1)) + "%"
   }
 
@@ -21,19 +21,11 @@ export const formatCellValue = (data: string, header: string) => {
     return formatMoney(+data)
   }
 
-  if (header.startsWith("timestamp")) {
+  if (header.startsWith("createdAt")) {
     if (moment(data, moment.ISO_8601, true).isValid()) {
       return moment(data).format("YYYY-MM-DD HH:mm:ss"); // or any format you prefer
     }
     return data
-  }
-
-  if (header.startsWith("created_at")) {
-    if (moment(data, moment.ISO_8601, true).isValid()) {
-      // Display relative time
-      return moment(data).fromNow(); // e.g., "a day ago", "2 hours ago"
-    }
-    return data;
   }
 
   return data;

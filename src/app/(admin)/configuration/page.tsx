@@ -12,18 +12,6 @@ export const metadata: Metadata = {
     "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
-export interface StrategyConfig {
-  symbol: string;             // Trading pair (e.g. "BTCUSDT")
-  base: string;               // Base currency (e.g. "USDT")
-  buy_threshold: number;      // Price drop below EMA to trigger a buy (e.g. 0.98 = 2% below)
-  buy_quantity: number;       // Amount to buy per trade (e.g. 0.1 BTC)
-  window: number;             // EMA period (number of candles)
-  cooldown_seconds: number;   // Cooldown between trades in seconds
-  stop_loss: number;          // Stop-loss as a fraction (e.g. 0.01 = -1%)
-  take_profit: number;        // Take-profit as a fraction (e.g. 0.02 = +2%)
-  max_volatility: number;     // Max allowed volatility (e.g. 0.02 = 2%)
-}
-
 export default async function Configuration() {
   let profile: any = null;
   let error: string | null = null;
@@ -32,7 +20,7 @@ export default async function Configuration() {
 
   try {
     const profilePromise =  apiGet("/users/profile", { token });
-    const configsPromise =  apiGet("/trading_pairs", { token });
+    const configsPromise =  apiGet("/trading-pairs", { token });
     [profile, configs] = await Promise.all([profilePromise, configsPromise])
   } catch (err: any) {
     console.error("Failed to load profile:", err);

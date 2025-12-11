@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { apiGet } from "@/requests";
 import { getAuthToken } from "@/requests/utils";
-import UsersComp from "./components";
 import OrdersComp from "./components";
 
 
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 export default async function Orders() {
   const token = await getAuthToken()
   const orders = await apiGet("/orders", { token })
-  const tradeTableHeaders = ["timestamp", "symbol", "side", "price", "avg_price", "quantity", "threshold", "percent_change", "result"]
+  const tradeTableHeaders = ["createdAt", "symbol", "side", "price", "avgPrice", "quantity", "threshold", "percentChange"]
 
   return <OrdersComp data={orders} tableHeaders={tradeTableHeaders} />;
 }

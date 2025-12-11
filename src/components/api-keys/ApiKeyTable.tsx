@@ -7,10 +7,10 @@ import { useState } from "react";
 interface IApiKey {
   id: string;
   user: string;
-  api_key: string;
-  api_secret: string;
+  apiKey: string;
+  apiSecret: string;
   environment: string;
-  created_at: string;
+  createdAt: string;
   status: "active" | "disabled";
   enabled: boolean;
 }
@@ -81,7 +81,7 @@ export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <input
-                          value={apiKey.api_key}
+                          value={apiKey.apiKey}
                           type="api"
                           id={`api-${apiKey.id}`}
                           className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full min-w-[360px] rounded-lg border border-gray-300 bg-transparent py-3 pr-[90px] pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -90,7 +90,7 @@ export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
                         <button
                           id={`copy-button-${apiKey.id}`}
                           className="absolute top-1/2 right-0 inline-flex h-11 -translate-y-1/2 cursor-pointer items-center gap-1 rounded-r-lg border border-gray-300 py-3 pr-3 pl-3.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                          onClick={() => handleCopy(apiKey.api_key, apiKey.id)}
+                          onClick={() => handleCopy(apiKey.apiKey, apiKey.id)}
                           disabled={copiedId === apiKey.id}
                         >
                           {copiedId === apiKey.id ? (
@@ -136,7 +136,7 @@ export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
                       </div>
                       <div className="relative">
                         <input
-                          value={apiKey.api_secret}
+                          value={apiKey.apiSecret}
                           type="api"
                           id={`api-${apiKey.id}`}
                           className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full min-w-[360px] rounded-lg border border-gray-300 bg-transparent py-3 pr-[90px] pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -145,7 +145,7 @@ export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
                         <button
                           id={`copy-button-${apiKey.id}`}
                           className="absolute top-1/2 right-0 inline-flex h-11 -translate-y-1/2 cursor-pointer items-center gap-1 rounded-r-lg border border-gray-300 py-3 pr-3 pl-3.5 text-sm font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
-                          onClick={() => handleCopy(apiKey.api_secret, apiKey.id)}
+                          onClick={() => handleCopy(apiKey.apiSecret, apiKey.id)}
                           disabled={copiedId === apiKey.id}
                         >
                           {copiedId === apiKey.id ? (
@@ -234,7 +234,7 @@ export default function ApiKeyTable({ apiKeys }: IApiKeyTable) {
                 </td>
                 
                 <td className="px-5 py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                  {formatCellValue(apiKey.created_at, "created_at")}
+                  {formatCellValue(apiKey.createdAt, "created_at")}
                 </td>
                 <td className="px-5 py-3 whitespace-nowrap">
                   <Switch defaultChecked={apiKey.enabled} label="" />

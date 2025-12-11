@@ -13,6 +13,6 @@ export const metadata: Metadata = {
 export default async function Users() {
   const token = await getAuthToken()
   const users = await apiGet("/users", { token })
-      const tableHeaders = ["email", "first_name", "last_name", "created_at"]
+      const tableHeaders = ["email", "firstName", "lastName", "provider", "createdAt"]
   return <UsersComp data={users} tableHeaders={tableHeaders} />;
 }

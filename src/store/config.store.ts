@@ -1,4 +1,4 @@
-import { create } from "zustand"; // ✅ must be exact
+import { create } from "zustand"; // must be exact
 
 
 interface Config {
@@ -15,7 +15,6 @@ interface ConfigState {
   botStatus: BotStatus | null,
   setConfig: (user: Config | null) => void;
   setBotStatus: (bot: BotStatus | null) => void;
-
 }
 
 export const useConfigStore = create<ConfigState>((set) => ({

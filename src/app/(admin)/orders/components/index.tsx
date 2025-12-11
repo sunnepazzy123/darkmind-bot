@@ -14,8 +14,6 @@ interface IOrdersComp {
 
 export default function OrdersComp({ data, tableHeaders }: IOrdersComp) {
 
-
-
 return (
     <div>
         <PageBreadcrumb pageTitle="Orders" />

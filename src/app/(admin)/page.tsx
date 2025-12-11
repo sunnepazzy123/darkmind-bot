@@ -29,13 +29,10 @@ export default function Ecommerce() {
     const fetchRecentPrices = async () => {
       try {
         const orderPromise = apiGet("/orders/");
-        const botStatusPromise = apiGet(`/bots/status/BTCUSDT/`);
+        const botStatusPromise = apiGet(`/binance-trading/status`);
         const accountBalancesPromise = apiGet(`/accounts/BTC/`);
 
-
-
         const [dataRecentPrices, dataOrders, dataBolt, dataAccountBalance] = await Promise.all([getUSDTPrices(), orderPromise, botStatusPromise, accountBalancesPromise, ])
-
 
         setOrders(dataOrders)
         setBotStatus(dataBolt)

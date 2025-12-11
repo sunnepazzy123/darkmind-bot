@@ -1,61 +1,39 @@
 "use client";
-import Checkbox from "@/components/form/input/Checkbox";
-import Input from "@/components/form/input/InputField";
-import Label from "@/components/form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
-import { apiGet, apiPost } from "@/requests";
+
+import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/user.store";
+import React, { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ACCESS_TOKEN } from "@/constants";
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
+
 export default function SignInForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
-  const setUser = useUserStore((state) => state.setUser);
-
-  // form state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
+  const params = useSearchParams();
   const router = useRouter();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await apiPost("/auth/login", {
-        email,
-        password,
-      });
-
-      const token = res?.access_token;
-      if (token) {
-        const profile = await apiGet("/users/profile", { token })
-        localStorage.setItem(ACCESS_TOKEN, token)
-        sessionStorage.setItem(ACCESS_TOKEN, token)
-        setUser(profile)
-      }
-
-      // redirect after successful signup
-      router.push("/");
-    } catch (err: any) {
-      setError(err?.message ?? "Registration failed");
-    } finally {
-      setLoading(false);
-    }
-  }
-
 async function handleOauthLogin() {
-  // Redirect to your backend Google OAuth endpoint
-    window.location.href = `${backendUrl}/auth/google?redirect_uri=${window.location.origin}/auth/callback`;
+  const backend = process.env.NODE_ENV === "production"
+    ? window.location.origin
+    : "http://localhost:8000";
+
+  const redirectUri = `${window.location.origin}/signin`;
+
+  const state = encodeURIComponent(JSON.stringify({ redirectUri }));
+
+  window.location.href =
+    `${backend}/api/auth/google?state=${state}`;
 }
+  useEffect(() => {
+    const token = params.get("token");
+    if (!token) return;
+
+    // save to localStorage
+    localStorage.setItem(ACCESS_TOKEN, token);
+    sessionStorage.setItem(ACCESS_TOKEN, token);
+
+    // redirect to dashboard
+    router.push("/");
+  }, [params, router]);
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
@@ -72,11 +50,8 @@ async function handleOauthLogin() {
         <div>
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign Up
+              Sign In
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign up!
-            </p>
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
@@ -107,111 +82,6 @@ async function handleOauthLogin() {
                 </svg>
                 Sign up with Google
               </button>
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
-                <svg
-                  width="21"
-                  className="fill-current"
-                  height="20"
-                  viewBox="0 0 21 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z" />
-                </svg>
-                Sign up with X
-              </button>
-            </div>
-            <div className="relative py-3 sm:py-5">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="p-2 text-gray-400 bg-white dark:bg-gray-900 sm:px-5 sm:py-2">
-                  Or
-                </span>
-              </div>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-5">
-                {/* <!-- Email --> */}
-                <div>
-                  <Label>
-                    Email<span className="text-error-500">*</span>
-                  </Label>
-                  <Input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                {/* <!-- Password --> */}
-                <div>
-                  <Label>
-                    Password<span className="text-error-500">*</span>
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      placeholder="Enter your password"
-                      type={showPassword ? "text" : "password"}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <span
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                      ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                      )}
-                    </span>
-                  </div>
-                </div>
-                {/* <!-- Checkbox --> */}
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    className="w-5 h-5"
-                    checked={isChecked}
-                    onChange={setIsChecked}
-                  />
-                  <p className="inline-block font-normal text-gray-500 dark:text-gray-400">
-                    By creating an account means you agree to the{" "}
-                    <span className="text-gray-800 dark:text-white/90">
-                      Terms and Conditions,
-                    </span>{" "}
-                    and our{" "}
-                    <span className="text-gray-800 dark:text-white">
-                      Privacy Policy
-                    </span>
-                  </p>
-                </div>
-                {error && <div className="text-sm text-red-500">{error}</div>}
-
-                {/* <!-- Button --> */}
-                <div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 disabled:opacity-60"
-                  >
-                    {loading ? "Signing in..." : "Sign In"}
-                  </button>
-                </div>
-              </div>
-            </form>
-
-            <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Already have an account?
-                <Link
-                  href="/signup"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Sign Up
-                </Link>
-              </p>
             </div>
           </div>
         </div>

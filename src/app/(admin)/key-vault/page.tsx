@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function ApiKeysPage() {
   const token = await getAuthToken()
-  const apiKeys = await apiGet("/key_vaults", { token })
+  const apiKeys = await apiGet("/key-vaults", { token })
   return (
     <div>
       <PageBreadcrumb pageTitle="API Keys" />

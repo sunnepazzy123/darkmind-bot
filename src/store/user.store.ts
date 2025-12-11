@@ -1,17 +1,10 @@
 import { create } from "zustand"; // ✅ must be exact
+import { IUser } from "@/interfaces/user.interface";
 
-
-interface User {
-  picture: string;
-  email: string,
-  last_name: string,
-  first_name: string,
-  id: string
-}
 
 interface UserState {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: IUser | null;
+  setUser: (user: IUser | null) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
