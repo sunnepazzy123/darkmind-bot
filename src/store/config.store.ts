@@ -7,7 +7,8 @@ interface Config {
 
 interface BotStatus {
     status: string,
-    last_trade: string
+    botRunning: boolean,
+    message: string
 }
 
 interface ConfigState {

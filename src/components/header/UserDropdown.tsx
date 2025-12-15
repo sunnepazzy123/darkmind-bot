@@ -42,6 +42,7 @@ export default function UserDropdown() {
             height={44}
             src={user?.picture ||  "/images/user/owner.jpg"}
             alt="User"
+            unoptimized // ensures it works in all environments
           />
         </span>
 

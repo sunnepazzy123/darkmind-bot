@@ -23,7 +23,8 @@ export default function Ecommerce() {
   const [loading, setLoading] = useState(true);
   const { setBotStatus } = useConfigStore((state) => state)
 
-  const tradeTableHeaders = ["timestamp", "symbol", "side", "price", "avg_price", "quantity", "threshold", "percent_change", "result"]
+  const tradeTableHeaders = ["createdAt", "symbol", "side", "price", "avgPrice", "quantity", "threshold", "percentChange"];
+
 
   useEffect(() => {
     const fetchRecentPrices = async () => {

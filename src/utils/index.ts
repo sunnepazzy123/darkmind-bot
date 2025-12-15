@@ -17,7 +17,7 @@ export const formatCellValue = (data: string, header: string) => {
     return Number(Number(data).toFixed(1)) + "%"
   }
 
-  if (header.endsWith("price")) {
+  if (header.endsWith("price") || header.endsWith("Price")) {
     return formatMoney(+data)
   }
 

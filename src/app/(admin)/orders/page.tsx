@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function Orders() {
   const token = await getAuthToken()
   const orders = await apiGet("/orders", { token })
-  const tradeTableHeaders = ["createdAt", "symbol", "side", "price", "avgPrice", "quantity", "threshold", "percentChange"]
+  const tradeTableHeaders = ["createdAt", "symbol", "side", "price", "avgPrice", "quantity", "threshold", "percentChange"];
 
   return <OrdersComp data={orders} tableHeaders={tradeTableHeaders} />;
 }

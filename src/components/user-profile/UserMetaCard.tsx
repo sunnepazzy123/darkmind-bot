@@ -28,6 +28,7 @@ export default function UserMetaCard({ user }: IUserInfoCard) {
                 height={80}
                 src={user.picture || "/images/user/owner.jpg"}
                 alt="user"
+                unoptimized // ensures it works in all environments
               />
             </div>
             <div className="order-3 xl:order-2">

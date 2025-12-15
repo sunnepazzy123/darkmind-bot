@@ -165,7 +165,7 @@ const AppHeader: React.FC = () => {
         >
           <div className="flex text-gray-900 dark:text-white">
             {config ? config.environment : ""}
-            Bot Status: {botStatus ? botStatus.status : "Off"}
+            Bot Status: {botStatus?.botRunning ? "On" : "Off"}
           </div>
           <div className="flex items-center gap-2 2xsm:gap-3">
             {/* <!-- Dark Mode Toggler --> */}

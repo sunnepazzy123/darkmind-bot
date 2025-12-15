@@ -4,6 +4,7 @@ import PaginatedTable from "@/components/tables/customPaginationTable";
 import { apiGet, apiPost } from "@/requests";
 import { useConfigStore } from "@/store/config.store";
 import { StrategyConfig } from "@/interfaces/configs.interface";
+import Button from "@/components/ui/button/Button";
 
 interface ICategoryCard {
     configs: StrategyConfig[]
@@ -11,17 +12,29 @@ interface ICategoryCard {
 
 export default function ConfigurationCard({ configs }: ICategoryCard) {
 
-       const { setBotStatus } =  useConfigStore((state) => state)
+    const { setBotStatus } = useConfigStore((state) => state)
 
-        const onStartBot = async (data: any) => {
+    const onStartBot = async () => {
         try {
-            await apiPost('/binance-trading/start-multi-bot', [data]);
+            await apiPost('/binance-trading/start-multi-bot', configs);
             const botStatus = await apiGet(`/binance-trading/status`);
             setBotStatus(botStatus)
-            alert(`Bot started successfully for ${data.symbol}!`);
+            alert(`Bot started successfully for all configs`);
         } catch (error) {
             console.error("Error starting bot:", error);
             alert("Failed to start bot");
+        }
+    };
+
+    const onStopBot = async () => {
+        try {
+            await apiGet('/binance-trading/stop');
+            const botStatus = await apiGet(`/binance-trading/status`);
+            setBotStatus(botStatus)
+            alert(`Bot stop successfully`);
+        } catch (error) {
+            console.error("Error stopping bot:", error);
+            alert("Failed to stop bot");
         }
     };
 
@@ -35,8 +48,23 @@ export default function ConfigurationCard({ configs }: ICategoryCard) {
                         Stream Params
                     </h4>
                 </div>
+                <div className="flex my-2 gap-3">
+                    <Button
+                        className="text-theme-xs"
+                    onClick={() => onStartBot()}
+                    >
+                        start all
+                    </Button>
+                    <Button
+                        className="text-theme-xs"
+                        onClick={() => onStopBot()}
+                    >
+                        stop
+                    </Button>
+                </div>
+
             </div>
-            <PaginatedTable tableHeaders={tableHeaders} tableData={configs} rowsPerPage={5} onActionClick={onStartBot} actionButtonNames={["start bot"]} />
+            <PaginatedTable tableHeaders={tableHeaders} tableData={configs} rowsPerPage={5} onActionClick={() => {}} actionButtonNames={["disable"]} />
         </div>
     );
 }

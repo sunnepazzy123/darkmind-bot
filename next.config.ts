@@ -3,15 +3,20 @@ import type { NextConfig } from "next";
 
 
 const nextConfig: NextConfig = {
-  /* config options here */
   eslint: {
-    ignoreDuringBuilds: true, // ignore ESLint errors
+    ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true, // ignore TypeScript errors
+    ignoreBuildErrors: true,
   },
   images: {
-    domains: ["lh3.googleusercontent.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({
@@ -20,7 +25,6 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-
 };
 
 export default nextConfig;
