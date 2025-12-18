@@ -9,3 +9,27 @@ export interface StrategyConfig {
   takeProfit: number;        // Take-profit as a fraction (e.g. 0.02 = +2%)
   maxVolatility: number;     // Max allowed volatility (e.g. 0.02 = 2%)
 }
+
+export enum OrderSide {
+  BUY = "BUY",
+  SELL = "SELL"
+};
+
+export interface IOrder {
+  symbol: string;
+  side: OrderSide;
+  price: number;
+  quantity: number;
+  createdAt: string;
+}
+
+export interface SymbolPnl {
+  realizedPnl: number;
+  openQty: number;
+  avgOpenPrice: number;
+  totalBuyQty: number;
+  totalSellQty: number;
+  hasOversell: boolean;
+}
+
+export type PnlBySymbol = Record<string, SymbolPnl>;

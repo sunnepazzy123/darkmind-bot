@@ -1,3 +1,4 @@
+import { IOrder, PnlBySymbol, SymbolPnl } from "@/interfaces/configs.interface";
 import axios from "axios";
 import moment from "moment";
 
@@ -28,8 +29,15 @@ export const formatCellValue = (data: string, header: string) => {
     return data
   }
 
-  return data;
+  if (header === "realizedPnl" || header === "avgOpenPrice" || header === "openQty" || header === "totalBuyQty" || header === "totalSellQty") {
+    return roundToDecimal(Number(data), 4);
+  }
 
+  if (header.startsWith("hasOversell")) {
+    return data === "true" ? "Yes" : "No";
+  }
+
+  return data;
 }
 
 export async function getUSDTPrices() {
@@ -81,4 +89,85 @@ export async function getUSDTPrices() {
     console.error("getUSDTPrices error:", err);
     throw err;
   }
+}
+
+
+export function calculateSymbolPnl(orders: IOrder[]): SymbolPnl {
+  const buys: { qty: number; price: number }[] = [];
+
+  let realizedPnl = 0;
+  let totalBuyQty = 0;
+  let totalSellQty = 0;
+
+  const sorted = [...orders].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
+  for (const o of sorted) {
+    if (o.side === 'BUY') {
+      buys.push({ qty: o.quantity, price: o.price });
+      totalBuyQty += o.quantity;
+    }
+
+    if (o.side === 'SELL') {
+      totalSellQty += o.quantity;
+      let remaining = o.quantity;
+
+      while (remaining > 0 && buys.length > 0) {
+        const buy = buys[0];
+        const matched = Math.min(remaining, buy.qty);
+
+        realizedPnl += (o.price - buy.price) * matched;
+
+        buy.qty -= matched;
+        remaining -= matched;
+
+        if (buy.qty === 0) buys.shift();
+      }
+    }
+  }
+
+  const openQty = buys.reduce((s, b) => s + b.qty, 0);
+  const avgOpenPrice =
+    openQty === 0
+      ? 0
+      : buys.reduce((s, b) => s + b.qty * b.price, 0) / openQty;
+
+  return {
+    realizedPnl,
+    openQty,
+    avgOpenPrice,
+    totalBuyQty,
+    totalSellQty,
+    hasOversell: totalSellQty > totalBuyQty,
+  };
+}
+
+
+export function calculatePnlBySymbol(allOrders: IOrder[]) {
+  const bySymbol: Record<string, IOrder[]> = {};
+
+  // group orders by symbol
+  for (const order of allOrders) {
+    if (!bySymbol[order.symbol]) bySymbol[order.symbol] = [];
+    bySymbol[order.symbol].push(order);
+  }
+
+  const result: PnlBySymbol = {};
+  let totalRealizedPnl = 0;
+
+  for (const symbol of Object.keys(bySymbol)) {
+    const pnl = calculateSymbolPnl(bySymbol[symbol]);
+    result[symbol] = pnl;
+    totalRealizedPnl += pnl.realizedPnl;
+  }
+
+  return {
+    symbols: result,
+    totalRealizedPnl,
+  };
+}
+
+export function roundToDecimal(amount: number, point = 2): number {
+  return Number(amount.toFixed(point));
 }

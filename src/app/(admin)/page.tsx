@@ -13,6 +13,7 @@ import { useConfigStore } from "@/store/config.store";
 import { getUSDTPrices } from "@/utils";
 import DividendChart from "@/components/stocks/DividendChart";
 import WatchList from "@/components/stocks/WatchList";
+import { ordersTableHeaders } from "@/constants";
 
 export default function Ecommerce() {
   const [recentPrices, setRecentPrices] = useState<any[]>([]);
@@ -23,7 +24,6 @@ export default function Ecommerce() {
   const [loading, setLoading] = useState(true);
   const { setBotStatus } = useConfigStore((state) => state)
 
-  const tradeTableHeaders = ["createdAt", "symbol", "side", "price", "avgPrice", "quantity", "threshold", "percentChange"];
 
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function Ecommerce() {
         {/* <DemographicCard /> */}
 
         <ComponentCard title="Bot Trade">
-          <PaginatedTable tableHeaders={tradeTableHeaders} tableData={orders} rowsPerPage={5} emptyDataMsg="No Trade" />
+          <PaginatedTable tableHeaders={ordersTableHeaders} tableData={orders} rowsPerPage={5} emptyDataMsg="No Trade" />
         </ComponentCard>
 
       </div>

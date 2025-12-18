@@ -48,23 +48,24 @@ export default function ConfigurationCard({ configs }: ICategoryCard) {
                         Stream Params
                     </h4>
                 </div>
-                <div className="flex my-2 gap-3">
-                    <Button
-                        className="text-theme-xs"
-                    onClick={() => onStartBot()}
-                    >
-                        start all
-                    </Button>
-                    <Button
-                        className="text-theme-xs"
-                        onClick={() => onStopBot()}
-                    >
-                        stop
-                    </Button>
-                </div>
-
+                {configs.length > 0 && (
+                    <div className="flex my-2 gap-3">
+                        <Button
+                            className="text-theme-xs"
+                            onClick={() => onStartBot()}
+                        >
+                            start all
+                        </Button>
+                        <Button
+                            className="text-theme-xs"
+                            onClick={() => onStopBot()}
+                        >
+                            stop
+                        </Button>
+                    </div>
+                )}
             </div>
-            <PaginatedTable tableHeaders={tableHeaders} tableData={configs} rowsPerPage={5} onActionClick={() => {}} actionButtonNames={["disable"]} />
+            <PaginatedTable tableHeaders={tableHeaders} tableData={configs} rowsPerPage={5} onActionClick={() => { }} actionButtonNames={["disable"]} />
         </div>
     );
 }
