@@ -25,7 +25,7 @@ async function handleOauthLogin() {
 }
   useEffect(() => {
     const token = params.get("token");
-    if (!token) return;
+    if (!token) return router.push("/signin");
 
     // save to localStorage
     localStorage.setItem(ACCESS_TOKEN, token);

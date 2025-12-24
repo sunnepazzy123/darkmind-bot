@@ -33,3 +33,12 @@ export interface SymbolPnl {
 }
 
 export type PnlBySymbol = Record<string, SymbolPnl>;
+
+export interface CryptoTickerRaw {
+  brandImage: string;
+  change: string;        // e.g. -0.077
+  changeDirection: "up" | "down";
+  companyName: string;
+  price: string;         // e.g. 87282.78
+  symbol: string;
+}

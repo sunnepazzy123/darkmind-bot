@@ -1,6 +1,7 @@
-import { IOrder, PnlBySymbol, SymbolPnl } from "@/interfaces/configs.interface";
+import { CryptoTickerRaw, IOrder, PnlBySymbol, SymbolPnl } from "@/interfaces/configs.interface";
 import axios from "axios";
 import moment from "moment";
+
 
 export const formatMoney = (amount: number, currency = "USD") => {
   return new Intl.NumberFormat("en-US", {
@@ -34,13 +35,13 @@ export const formatCellValue = (data: string, header: string) => {
   }
 
   if (header.startsWith("hasOversell")) {
-    return data === "true" ? "Yes" : "No";
+    return data ? "Yes" : "No";
   }
 
   return data;
 }
 
-export async function getUSDTPrices() {
+export async function getUSDTPrices(): Promise<CryptoTickerRaw[]>  {
   const majorCoins: Record<string, string> = {
     BTC: "Bitcoin",
     ETH: "Ethereum",
@@ -82,7 +83,7 @@ export async function getUSDTPrices() {
         changeDirection:
           changePercent >= 0 ? "up" : "down",
         brandImage: brandMap[asset],
-      };
+      } as unknown as CryptoTickerRaw;
     });
 
   } catch (err) {
@@ -171,3 +172,5 @@ export function calculatePnlBySymbol(allOrders: IOrder[]) {
 export function roundToDecimal(amount: number, point = 2): number {
   return Number(amount.toFixed(point));
 }
+
+

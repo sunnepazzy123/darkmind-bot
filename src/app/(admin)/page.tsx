@@ -4,7 +4,6 @@ import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
 import { apiGet } from "@/requests";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -14,13 +13,11 @@ import { getUSDTPrices } from "@/utils";
 import DividendChart from "@/components/stocks/DividendChart";
 import WatchList from "@/components/stocks/WatchList";
 import { ordersTableHeaders } from "@/constants";
+import { CryptoTickerRaw } from "@/interfaces/configs.interface";
 
 export default function Ecommerce() {
-  const [recentPrices, setRecentPrices] = useState<any[]>([]);
-  const [account, setAccount] = useState<any[]>([]);
+  const [recentPrices, setRecentPrices] = useState<CryptoTickerRaw[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
-
-  const [symbol, setSymbol] = useState("BTC")
   const [loading, setLoading] = useState(true);
   const { setBotStatus } = useConfigStore((state) => state)
 
@@ -31,14 +28,12 @@ export default function Ecommerce() {
       try {
         const orderPromise = apiGet("/orders/");
         const botStatusPromise = apiGet(`/binance-trading/status`);
-        const accountBalancesPromise = apiGet(`/accounts/BTC/`);
 
-        const [dataRecentPrices, dataOrders, dataBolt, dataAccountBalance] = await Promise.all([getUSDTPrices(), orderPromise, botStatusPromise, accountBalancesPromise, ])
+        const [dataRecentPrices, dataOrders, dataBolt] = await Promise.all([getUSDTPrices(), orderPromise, botStatusPromise, ])
 
         setOrders(dataOrders)
         setBotStatus(dataBolt)
         setRecentPrices(dataRecentPrices)
-        setAccount(dataAccountBalance)
       } catch (err) {
         console.error("Failed to fetching:", err);
       } finally {
@@ -59,7 +54,7 @@ export default function Ecommerce() {
             Loading metrics...
           </div>
         ) : (
-          <EcommerceMetrics account={account} symbol={symbol} />
+          <EcommerceMetrics recentPrices={recentPrices} />
         )}
         <MonthlyTarget />
 

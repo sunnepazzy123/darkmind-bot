@@ -5,18 +5,10 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { MoreDotIcon } from "@/icons";
 import Image from "next/image";
-
-type WatchlistItemProps = {
-  symbol: string;
-  companyName: string;
-  price: string;
-  change: string;
-  changeDirection: "up" | "down"; // Determines icon and color
-  brandImage: string; // Path to the brand image
-};
+import { CryptoTickerRaw } from "@/interfaces/configs.interface";
 
 
-const WatchlistItem: React.FC<WatchlistItemProps> = ({
+const WatchlistItem: React.FC<CryptoTickerRaw> = ({
   symbol,
   companyName,
   price,
@@ -59,7 +51,7 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({
 };
 
 interface IWatchList {
-  recentPrices: WatchlistItemProps[]
+  recentPrices: CryptoTickerRaw[]
 }
 
 export default function WatchList({recentPrices}: IWatchList) {
